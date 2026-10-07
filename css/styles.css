@@ -1,0 +1,197 @@
+/* Custom Styles & Animation Enhancements */
+
+@layer utilities {
+    /* Glassmorphism background */
+    .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-nav {
+        background: rgba(9, 13, 22, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #14b8a6;
+}
+
+/* Active Nav Indicator */
+.active-nav {
+    background-color: rgba(30, 41, 59, 0.8) !important;
+    color: #2dd4bf !important;
+    border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+/* Custom Glow Effects */
+.glow-brand {
+    box-shadow: 0 0 25px rgba(20, 184, 166, 0.25);
+}
+
+.glow-cyan {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+}
+
+.glow-purple {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+/* Floating animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(1deg);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Subtle Pulse Glow */
+@keyframes pulseGlow {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.pulse-glow {
+    animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Code block highlight styling */
+pre code {
+    font-family: 'Fira Code', monospace;
+}
+
+/* Modal transition */
+#resume-modal, #project-modal {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Counter animation styles */
+.counter {
+    display: inline-block;
+}
+
+/* PRINT MEDIA STYLES - SINGLE PAGE RESUME PRINTING */
+@media print {
+    @page {
+        margin: 12mm 15mm 12mm 15mm;
+        size: A4 portrait;
+    }
+
+    /* Hide background canvas, header, main page, footer, and interactive elements */
+    #canvas-container,
+    header,
+    main,
+    footer,
+    #project-modal,
+    button,
+    .no-print {
+        display: none !important;
+    }
+
+    /* Force Resume Modal to render as single print document */
+    #resume-modal {
+        position: static !important;
+        display: block !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        overflow: visible !important;
+        backdrop-filter: none !important;
+    }
+
+    #resume-modal > div {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    #resume-modal h3 {
+        color: #0f172a !important;
+        font-size: 18pt !important;
+        margin-bottom: 2pt !important;
+    }
+
+    #resume-modal h4 {
+        color: #0d9488 !important;
+        font-size: 10pt !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+        padding-bottom: 2pt !important;
+        margin-top: 8pt !important;
+        margin-bottom: 4pt !important;
+    }
+
+    #resume-modal p, 
+    #resume-modal span, 
+    #resume-modal div, 
+    #resume-modal li {
+        color: #334155 !important;
+        font-size: 9pt !important;
+        line-height: 1.3 !important;
+    }
+
+    #resume-modal strong {
+        color: #0f172a !important;
+    }
+
+    /* Make containers compact */
+    #resume-modal .bg-slate-950\/50,
+    #resume-modal .bg-slate-950 {
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        padding: 6pt 10pt !important;
+        margin-bottom: 4pt !important;
+        border-radius: 4px !important;
+    }
+
+    #resume-modal .space-y-6 > * + * {
+        margin-top: 8pt !important;
+    }
+
+    #resume-modal .space-y-4 > * + * {
+        margin-top: 4pt !important;
+    }
+
+    #resume-modal .pb-6 {
+        padding-bottom: 6pt !important;
+        margin-bottom: 6pt !important;
+    }
+}

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael Español Garcia | Full-Stack Developer & Systems Engineer Portfolio</title>
+    <meta name="description" content="3D Interactive Portfolio of Michael Español Garcia - Full-Stack Web Developer specializing in enterprise management systems, Flask, MS SQL, Python, and modern web applications.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        accent: {
+                            purple: '#8b5cf6',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        },
+                        dark: {
+                            bg: '#090d16',
+                            card: 'rgba(15, 23, 42, 0.75)',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                            glass: 'rgba(15, 23, 42, 0.6)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Chart.js CDN for live project metrics preview -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-[#090d16] text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden relative">
+
+    <!-- 3D Canvas Container Background -->
+    <div id="canvas-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Glowing Background Gradients -->
+    <div class="fixed top-1/4 left-1/4 w-96 h-96 bg-accent-cyan/15 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-1/3 right-1/4 w-96 h-96 bg-accent-purple/15 rounded-full blur-[140px] pointer-events-none z-0"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md bg-dark-bg/70 border-b border-slate-800/60" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-cyan p-0.5 shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-display font-bold text-brand-400 text-lg">
+                        MG
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display font-bold text-lg text-white tracking-tight group-hover:text-brand-400 transition-colors">Michael Garcia</span>
+                    <span class="text-xs text-slate-400 font-mono">Full-Stack Engineer</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
+                <a href="#hero" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all active-nav">Home</a>
+                <a href="#about" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">About</a>
+                <a href="#skills" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Skills</a>
+                <a href="#projects" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Projects</a>
+                <a href="#architecture" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Workflows</a>
+                <a href="#contact" class="nav-link text-sm font-medium px-4 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Contact</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="hidden md:flex items-center gap-3">
+                <button id="toggle-3d-btn" class="p-2.5 rounded-xl bg-slate-800/70 border border-slate-700/60 text-slate-300 hover:text-brand-400 hover:border-brand-500/50 transition-all text-sm flex items-center gap-2" title="Toggle 3D Scene Controls">
+                    <i class="fa-solid fa-cube text-brand-400"></i>
+                    <span class="text-xs font-mono">3D View</span>
+                </button>
+                <button onclick="openResumeModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-accent-cyan hover:from-brand-400 hover:to-accent-cyan text-slate-950 font-semibold text-sm shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
+                    Resume <i class="fa-solid fa-file-arrow-down ml-1.5"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-950/95 border-b border-slate-800 px-4 pt-2 pb-6 flex flex-col gap-3">
+            <a href="#hero" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">Home</a>
+            <a href="#about" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">About</a>
+            <a href="#skills" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">Skills</a>
+            <a href="#projects" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">Projects</a>
+            <a href="#architecture" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">Workflows</a>
+            <a href="#contact" class="mobile-nav-link text-slate-300 hover:text-brand-400 py-2 font-medium border-b border-slate-800/40">Contact</a>
+            <div class="flex items-center justify-between pt-2">
+                <button onclick="openResumeModal()" class="w-full text-center py-2.5 rounded-xl bg-brand-500 text-slate-950 font-semibold text-sm">
+                    View Resume <i class="fa-solid fa-file-arrow-down ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-20">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[calc(100vh-5rem)] flex items-center justify-center relative px-4 sm:px-6 lg:px-8 py-16">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+                
+                <!-- Hero Text -->
+                <div class="lg:col-span-7 flex flex-col items-start space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-brand-500/30 text-brand-400 text-xs font-mono tracking-wide shadow-inner">
+                        <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+                        <span>ENTERPRISE SYSTEMS & FULL-STACK DEVELOPER</span>
+                    </div>
+
+                    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                        Building Intelligent <br>
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-accent-cyan to-accent-purple">
+                            3D & Enterprise Solutions
+                        </span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Hi, I'm <strong class="text-white font-semibold">Michael Español Garcia</strong>. A BS Information Technology graduate specialized in designing end-to-end full-stack systems, including <span class="text-brand-400 font-medium">Drawing Revision Management</span>, <span class="text-accent-cyan font-medium">Fan Assembly Monitoring</span>, and <span class="text-accent-purple font-medium">Vehicle Validation Systems</span> using Python (Flask), JS, and MS SQL / MySQL.
+                    </p>
+
+                    <!-- Interactive Code Typing Preview -->
+                    <div class="w-full max-w-xl bg-slate-950/80 rounded-xl border border-slate-800 p-4 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md relative group">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                            </div>
+                            <span class="text-slate-500">engineer_profile.py</span>
+                        </div>
+                        <pre class="overflow-x-auto"><code class="text-slate-400"><span class="text-purple-400">class</span> <span class="text-yellow-300">SoftwareEngineer</span>:
+    <span class="text-purple-400">def</span> <span class="text-blue-400">__init__</span>(self):
+        self.name = <span class="text-emerald-300">"Michael Español Garcia"</span>
+        self.degree = <span class="text-emerald-300">"BS Information Technology"</span>
+        self.specialties = [<span class="text-emerald-300">"Flask"</span>, <span class="text-emerald-300">"MS SQL"</span>, <span class="text-emerald-300">"JS"</span>, <span class="text-emerald-300">"Tailwind"</span>]
+        self.systems_built = [<span class="text-emerald-300">"Drawing Standard System"</span>, <span class="text-emerald-300">"Fan Assembly Parts Monitor"</span>]
+    
+    <span class="text-purple-400">def</span> <span class="text-blue-400">status</span>(self):
+        <span class="text-purple-400">return</span> <span class="text-emerald-300">"Ready to engineer high-impact solutions 🚀"</span></code></pre>
+                    </div>
+
+                    <!-- Action CTA Buttons -->
+                    <div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+                        <a href="#projects" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-brand-500 via-brand-600 to-accent-cyan text-slate-950 font-bold text-sm shadow-xl shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <span>Explore Custom Systems</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="px-7 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-white font-medium text-sm transition-all flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <i class="fa-regular fa-paper-plane text-brand-400"></i>
+                            <span>Get In Touch</span>
+                        </a>
+                    </div>
+
+                    <!-- Metrics / Stats Grid -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 w-full max-w-xl">
+                        <div>
+                            <div class="font-display font-bold text-2xl sm:text-3xl text-white flex items-center">
+                                <span class="counter" data-target="4">4</span>+
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">Enterprise Systems</div>
+                        </div>
+                        <div>
+                            <div class="font-display font-bold text-2xl sm:text-3xl text-brand-400 flex items-center">
+                                <span class="counter" data-target="100">100</span>%
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">Full-Stack Coverage</div>
+                        </div>
+                        <div>
+                            <div class="font-display font-bold text-2xl sm:text-3xl text-accent-cyan flex items-center">
+                                <span class="counter" data-target="2025">2025</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">BS IT Graduate</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 3D Interactive Feature Box / Interactive Widget -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="w-full max-w-md aspect-square bg-slate-900/60 rounded-3xl border border-slate-800/90 p-6 backdrop-blur-xl relative overflow-hidden shadow-2xl group hover:border-brand-500/50 transition-all flex flex-col justify-between">
+                        
+                        <!-- Floating Tech Tags -->
+                        <div class="flex items-center justify-between z-10">
+                            <span class="text-xs font-mono bg-brand-500/10 text-brand-400 border border-brand-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="fa-brands fa-python text-brand-400"></i> Interactive 3D Python Flask Logo
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono">Drag to Rotate</span>
+                        </div>
+
+                        <!-- Embedded 3D Canvas Canvas Scene Preview Target -->
+                        <div id="hero-3d-interactive" class="w-full h-64 my-auto relative cursor-grab active:cursor-grabbing flex items-center justify-center">
+                            <!-- Canvas injected dynamically via three-scene.js -->
+                            <div class="absolute text-center pointer-events-none text-slate-500 text-xs font-mono opacity-40">
+                                [ 3D Viking Drinking Horn • Python Flask ]
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Info -->
+                        <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 z-10 flex items-center justify-between">
+                            <div>
+                                <div class="text-xs text-slate-400">Primary Core Tech</div>
+                                <div class="text-sm font-semibold text-white flex items-center gap-2 mt-0.5">
+                                    <i class="fa-brands fa-python text-amber-400"></i> Python (Flask) + MS SQL
+                                </div>
+                            </div>
+                            <button onclick="scrollToSection('architecture')" class="p-2 rounded-xl bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 transition-colors">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-400 text-xs font-mono uppercase tracking-wider font-semibold">Background & Expertise</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white mt-2">
+                    Engineering Systems That Drive Production & Standards
+                </h2>
+                <div class="w-16 h-1 bg-gradient-to-r from-brand-500 to-accent-cyan mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Left Bio Card -->
+                <div class="lg:col-span-7 bg-slate-900/50 border border-slate-800 rounded-3xl p-8 backdrop-blur-md flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute -right-16 -top-16 w-40 h-40 bg-brand-500/10 rounded-full blur-2xl group-hover:bg-brand-500/20 transition-all"></div>
+                    
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                            <i class="fa-solid fa-user-gear text-brand-400"></i> Professional Profile
+                        </h3>
+                        <p class="text-slate-300 leading-relaxed mb-6">
+                            I am a motivated <strong class="text-white">BS in Information Technology</strong> graduate from President Ramon Magsaysay State University Main Campus. Currently in an active enterprise role, I specialize in architecting custom production management systems that solve real-world operational bottlenecks.
+                        </p>
+                        <p class="text-slate-300 leading-relaxed mb-6">
+                            My core experience spans building **Customer Standard Management Systems** for engineering revision tracking, **Fan Assembly Parts Monitoring Systems** with end-to-end supply chain integration (Forecast SO -> Assembly -> PQA -> Shipment), **Vehicle Validation Systems**, and **Accessible E-Learning Applications**.
+                        </p>
+                    </div>
+
+                    <!-- Highlighted Pill badges -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-slate-800">
+                        <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-cubes-stacked text-brand-400 mb-1"></i>
+                            <div class="text-xs font-semibold text-white">Full-Stack Dev</div>
+                            <div class="text-[11px] text-slate-400">Flask, REST, React</div>
+                        </div>
+                        <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-database text-accent-cyan mb-1"></i>
+                            <div class="text-xs font-semibold text-white">Database Design</div>
+                            <div class="text-[11px] text-slate-400">MS SQL, MySQL, Postgres</div>
+                        </div>
+                        <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800 col-span-2 sm:col-span-1">
+                            <i class="fa-solid fa-microchip text-accent-purple mb-1"></i>
+                            <div class="text-xs font-semibold text-white">Hardware & Network</div>
+                            <div class="text-[11px] text-slate-400">Systems Servicing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Education & Contact Info Card -->
+                <div class="lg:col-span-5 bg-slate-900/50 border border-slate-800 rounded-3xl p-8 backdrop-blur-md flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-graduation-cap text-accent-cyan"></i> Educational Attainment
+                        </h3>
+
+                        <div class="space-y-6">
+                            <!-- Tertiary -->
+                            <div class="relative pl-6 border-l-2 border-brand-500">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-950 border-2 border-brand-500"></div>
+                                <span class="text-xs font-mono text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded">2024 - 2025</span>
+                                <h4 class="text-base font-bold text-white mt-1">Bachelor of Science in Information Technology</h4>
+                                <p class="text-sm text-slate-400">President Ramon Magsaysay State University Main Campus</p>
+                            </div>
+
+                            <!-- Secondary -->
+                            <div class="relative pl-6 border-l-2 border-slate-700">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-950 border-2 border-slate-600"></div>
+                                <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded">2020 - 2021</span>
+                                <h4 class="text-base font-bold text-white mt-1">Computer Systems Servicing</h4>
+                                <p class="text-sm text-slate-400">Northern Zambales College INC.</p>
+                            </div>
+
+                            <!-- Primary -->
+                            <div class="relative pl-6 border-l-2 border-slate-700">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-950 border-2 border-slate-600"></div>
+                                <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded">2014 - 2015</span>
+                                <h4 class="text-base font-bold text-white mt-1">Primary Education</h4>
+                                <p class="text-sm text-slate-400">Bamban, Masinloc, Zambales</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Details Badge -->
+                    <div class="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-rose-400"></i> Masinloc, Zambales</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> 0951-056-8468</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Matrix -->
+        <section id="skills" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-400 text-xs font-mono uppercase tracking-wider font-semibold">Skill Set & Technologies</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white mt-2">
+                    Comprehensive Technical Stack
+                </h2>
+                <p class="text-slate-400 text-sm mt-3">Ranging from high-performance web backends to industrial relational database schemas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Frontend -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-brand-500/40 transition-all hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400 text-xl mb-4 group-hover:bg-brand-500 group-hover:text-slate-950 transition-all">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-white mb-4">Frontend Development</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">HTML5 & CSS3</span>
+                                <span class="text-brand-400 font-mono">95%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 h-full rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">JavaScript (ES6+)</span>
+                                <span class="text-brand-400 font-mono">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Tailwind CSS</span>
+                                <span class="text-brand-400 font-mono">88%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 h-full rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">React JS</span>
+                                <span class="text-brand-400 font-mono">82%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 h-full rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-accent-cyan/40 transition-all hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/10 border border-accent-cyan/30 flex items-center justify-center text-accent-cyan text-xl mb-4 group-hover:bg-accent-cyan group-hover:text-slate-950 transition-all">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-white mb-4">Backend Architecture</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Python & Flask</span>
+                                <span class="text-accent-cyan font-mono">92%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-cyan h-full rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">RESTful APIs</span>
+                                <span class="text-accent-cyan font-mono">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-cyan h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">PHP / Laravel</span>
+                                <span class="text-accent-cyan font-mono">80%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-cyan h-full rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Desktop GUI (Kivy)</span>
+                                <span class="text-accent-cyan font-mono">78%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-cyan h-full rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Databases -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-accent-purple/40 transition-all hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-accent-purple/10 border border-accent-purple/30 flex items-center justify-center text-accent-purple text-xl mb-4 group-hover:bg-accent-purple group-hover:text-slate-950 transition-all">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-white mb-4">Databases & Storage</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">MS SQL Server</span>
+                                <span class="text-accent-purple font-mono">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-purple h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">MySQL</span>
+                                <span class="text-accent-purple font-mono">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-purple h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">PostgreSQL</span>
+                                <span class="text-accent-purple font-mono">82%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-purple h-full rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">SQLite3</span>
+                                <span class="text-accent-purple font-mono">85%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accent-purple h-full rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Systems & Hardware -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-amber-500/40 transition-all hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4 group-hover:bg-amber-400 group-hover:text-slate-950 transition-all">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-white mb-4">Networking & Hardware</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Network Config</span>
+                                <span class="text-amber-400 font-mono">88%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-amber-400 h-full rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Hardware Servicing</span>
+                                <span class="text-amber-400 font-mono">92%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-amber-400 h-full rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">System Troubleshooting</span>
+                                <span class="text-amber-400 font-mono">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-amber-400 h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300 font-medium">Version Control (Git)</span>
+                                <span class="text-amber-400 font-mono">85%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-amber-400 h-full rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Featured Projects Showcase -->
+        <section id="projects" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-brand-400 text-xs font-mono uppercase tracking-wider font-semibold">Portfolio Showcase</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white mt-2">
+                        Featured Production Systems
+                    </h2>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap gap-2 mt-4 md:mt-0" id="project-filters">
+                    <button data-filter="all" class="filter-btn active text-xs font-medium px-4 py-2 rounded-xl bg-brand-500 text-slate-950 font-bold transition-all">All Projects</button>
+                    <button data-filter="enterprise" class="filter-btn text-xs font-medium px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all">Enterprise Systems</button>
+                    <button data-filter="web" class="filter-btn text-xs font-medium px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all">Web Applications</button>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-container">
+
+                <!-- PROJECT 1: Customer Standard Management System -->
+                <div class="project-card enterprise bg-slate-900/70 border border-slate-800 hover:border-brand-500/50 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group shadow-xl">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-semibold">
+                                <i class="fa-solid fa-industry mr-1"></i> Current Company Project
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono">Flask + MS SQL</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-brand-400 transition-colors mb-3">
+                            Customer Standard Management System
+                        </h3>
+
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Enterprise system enabling engineering teams to upload standard drawings, track versioning history, approve technical design revisions, and maintain single-source-of-truth document control across departments.
+                        </p>
+
+                        <!-- Highlights List -->
+                        <ul class="space-y-2 text-xs text-slate-300 mb-6">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+                                <span>Multi-version drawing revision control with file history log.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+                                <span>Secure document upload & instant blueprint preview interface.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+                                <span>Robust MS SQL Server backend for audit compliance.</span>
+                            </li>
+                        </ul>
+
+                        <!-- Tech Stack Badges -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">HTML5/CSS3</span>
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">JavaScript</span>
+                            <span class="bg-slate-800 text-brand-400 text-[11px] font-mono px-2.5 py-1 rounded-lg">Python Flask</span>
+                            <span class="bg-slate-800 text-accent-cyan text-[11px] font-mono px-2.5 py-1 rounded-lg">MS SQL Server</span>
+                        </div>
+                    </div>
+
+                    <div class="px-8 pb-8 pt-0 flex items-center justify-between border-t border-slate-800/60">
+                        <button onclick="openProjectModal('drawing-system')" class="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                            <span>Inspect System Architecture & Details</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2: Fan Assy Parts Monitoring System -->
+                <div class="project-card enterprise bg-slate-900/70 border border-slate-800 hover:border-accent-cyan/50 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group shadow-xl">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-xs font-mono font-semibold">
+                                <i class="fa-solid fa-boxes-packing mr-1"></i> Current Company Project
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono">Flask + Analytics</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-accent-cyan transition-colors mb-3">
+                            Fan Assembly Parts Monitoring System
+                        </h3>
+
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            End-to-end industrial assembly tracking system covering mass Forecast SO / Shop Order ingestion, Warehouse receiving, Assembly Production, Quality Assurance (PQA), and Shipment with live graphical summaries.
+                        </p>
+
+                        <!-- Highlights List -->
+                        <ul class="space-y-2 text-xs text-slate-300 mb-6">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-accent-cyan mt-0.5"></i>
+                                <span>Mass Excel/CSV SO forecast upload & Shop Order management.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-accent-cyan mt-0.5"></i>
+                                <span>Multi-department workflow: WH -> Assembly -> PQA -> Shipment.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-accent-cyan mt-0.5"></i>
+                                <span>Interactive analytical dashboard with target vs. delivered graphs.</span>
+                            </li>
+                        </ul>
+
+                        <!-- Tech Stack Badges -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">HTML/CSS/JS</span>
+                            <span class="bg-slate-800 text-brand-400 text-[11px] font-mono px-2.5 py-1 rounded-lg">Python Flask</span>
+                            <span class="bg-slate-800 text-accent-cyan text-[11px] font-mono px-2.5 py-1 rounded-lg">MS SQL Server</span>
+                            <span class="bg-slate-800 text-accent-purple text-[11px] font-mono px-2.5 py-1 rounded-lg">Chart.js Analytics</span>
+                        </div>
+                    </div>
+
+                    <div class="px-8 pb-8 pt-0 flex items-center justify-between border-t border-slate-800/60">
+                        <button onclick="openProjectModal('fan-assy')" class="text-xs font-semibold text-accent-cyan hover:text-cyan-300 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                            <span>Inspect System Pipeline & Live Chart Preview</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PROJECT 3: Vehicle Validation Web System -->
+                <div class="project-card web bg-slate-900/70 border border-slate-800 hover:border-accent-purple/50 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group shadow-xl">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-accent-purple/10 border border-accent-purple/30 text-accent-purple text-xs font-mono font-semibold">
+                                <i class="fa-solid fa-car mr-1"></i> Full-Stack Web System
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono">Flask + React + MySQL</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-accent-purple transition-colors mb-3">
+                            Vehicle Validation Web System
+                        </h3>
+
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Comprehensive web platform for vehicle registration validation, featuring role-based authentication, online payment integration, automatic validation sticker generation, and secure document storage.
+                        </p>
+
+                        <!-- Tech Stack Badges -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">Python Flask</span>
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">React JS</span>
+                            <span class="bg-slate-800 text-brand-400 text-[11px] font-mono px-2.5 py-1 rounded-lg">REST APIs</span>
+                            <span class="bg-slate-800 text-accent-purple text-[11px] font-mono px-2.5 py-1 rounded-lg">MySQL</span>
+                        </div>
+                    </div>
+
+                    <div class="px-8 pb-8 pt-0 flex items-center justify-between border-t border-slate-800/60">
+                        <button onclick="openProjectModal('vehicle-validation')" class="text-xs font-semibold text-accent-purple hover:text-purple-300 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                            <span>Inspect Features & API Integration</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PROJECT 4: E-Learning Application for Hearing-Impaired -->
+                <div class="project-card web bg-slate-900/70 border border-slate-800 hover:border-amber-500/50 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group shadow-xl">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-semibold">
+                                <i class="fa-solid fa-hands-asl-interpreting mr-1"></i> Accessibility Application
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono">Python + Kivy</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-amber-400 transition-colors mb-3">
+                            E-Learning for Hearing-Impaired Learners
+                        </h3>
+
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Accessible standalone application designed to empower hearing-impaired students with visual-based interactive lessons, sign language captioned media, and localized SQLite data tracking.
+                        </p>
+
+                        <!-- Tech Stack Badges -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">Python</span>
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">Kivy Framework</span>
+                            <span class="bg-slate-800 text-amber-400 text-[11px] font-mono px-2.5 py-1 rounded-lg">SQLite3</span>
+                            <span class="bg-slate-800 text-slate-300 text-[11px] font-mono px-2.5 py-1 rounded-lg">UI/UX Accessibility</span>
+                        </div>
+                    </div>
+
+                    <div class="px-8 pb-8 pt-0 flex items-center justify-between border-t border-slate-800/60">
+                        <button onclick="openProjectModal('elearning-app')" class="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                            <span>Inspect Features & Accessibility Scope</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- System Architecture & Workflow Visualizer Section -->
+        <section id="architecture" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+                <div class="max-w-3xl mb-10">
+                    <span class="text-brand-400 text-xs font-mono uppercase tracking-wider font-semibold">Interactive Workflow Visualizer</span>
+                    <h2 class="font-display text-3xl font-extrabold text-white mt-1">
+                        Fan Assembly & Drawing Revision Pipeline Logic
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-2">
+                        Explore how data flows through the enterprise systems engineered by Michael Garcia.
+                    </p>
+                </div>
+
+                <!-- Workflow Selector Tabs -->
+                <div class="flex gap-4 border-b border-slate-800 pb-4 mb-8">
+                    <button id="tab-fan-assy" onclick="switchWorkflowTab('fan')" class="px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm bg-brand-500 text-slate-950 font-bold transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project"></i> Fan Assembly Supply Chain Workflow
+                    </button>
+                    <button id="tab-drawing" onclick="switchWorkflowTab('drawing')" class="px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm bg-slate-800 text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-file-shield"></i> Customer Drawing Revision Workflow
+                    </button>
+                </div>
+
+                <!-- FAN ASSEMBLY PIPELINE STEPPER -->
+                <div id="workflow-fan" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                        <!-- Step 1 -->
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative group hover:border-brand-500/50 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 font-mono font-bold text-xs flex items-center justify-center mb-3">01</div>
+                            <h4 class="font-bold text-white text-sm">Forecast SO Upload</h4>
+                            <p class="text-slate-400 text-xs mt-1">Sales & Planning mass upload forecast shop orders into MS SQL database.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative group hover:border-brand-500/50 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-accent-cyan/20 text-accent-cyan font-mono font-bold text-xs flex items-center justify-center mb-3">02</div>
+                            <h4 class="font-bold text-white text-sm">Warehouse Receive</h4>
+                            <p class="text-slate-400 text-xs mt-1">WH staff logs input when raw parts and materials arrive at facility.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative group hover:border-brand-500/50 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-accent-purple/20 text-accent-purple font-mono font-bold text-xs flex items-center justify-center mb-3">03</div>
+                            <h4 class="font-bold text-white text-sm">Assembly Line</h4>
+                            <p class="text-slate-400 text-xs mt-1">Assembly Production assembles fans according to scheduled target.</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative group hover:border-brand-500/50 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-xs flex items-center justify-center mb-3">04</div>
+                            <h4 class="font-bold text-white text-sm">PQA Inspection</h4>
+                            <p class="text-slate-400 text-xs mt-1">Quality assurance tests finished products and logs inspection pass/fail.</p>
+                        </div>
+                        <!-- Step 5 -->
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl relative group hover:border-brand-500/50 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center mb-3">05</div>
+                            <h4 class="font-bold text-white text-sm">Shipment & Graphs</h4>
+                            <p class="text-slate-400 text-xs mt-1">Final dispatch logging with real-time output vs target graph summaries.</p>
+                        </div>
+                    </div>
+
+                    <!-- Live Dynamic Chart Simulation -->
+                    <div class="mt-8 bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-xs font-mono text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-chart-column text-brand-400"></i> Live Summary Metrics Simulation (Target vs Delivered Parts)
+                            </h4>
+                            <span class="text-xs text-brand-400 font-mono bg-brand-500/10 px-2.5 py-1 rounded">Interactive</span>
+                        </div>
+                        <div class="h-56 w-full">
+                            <canvas id="fanAssyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DRAWING REVISION PIPELINE STEPPER -->
+                <div id="workflow-drawing" class="space-y-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 font-mono font-bold text-xs flex items-center justify-center mb-3">01</div>
+                            <h4 class="font-bold text-white text-sm">Drawing Upload</h4>
+                            <p class="text-slate-400 text-xs mt-1">Engineers upload custom customer standard blueprint files.</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="w-8 h-8 rounded-lg bg-accent-cyan/20 text-accent-cyan font-mono font-bold text-xs flex items-center justify-center mb-3">02</div>
+                            <h4 class="font-bold text-white text-sm">Versioning Index</h4>
+                            <p class="text-slate-400 text-xs mt-1">Automatic v1.0, v1.1 indexing with timestamp & change log generation.</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="w-8 h-8 rounded-lg bg-accent-purple/20 text-accent-purple font-mono font-bold text-xs flex items-center justify-center mb-3">03</div>
+                            <h4 class="font-bold text-white text-sm">Revision Review</h4>
+                            <p class="text-slate-400 text-xs mt-1">Cross-department verification and modification request workflow.</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center mb-3">04</div>
+                            <h4 class="font-bold text-white text-sm">Master Release</h4>
+                            <p class="text-slate-400 text-xs mt-1">Approved blueprint set active for active production line usage.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 text-center py-10">
+                        <i class="fa-solid fa-file-signature text-4xl text-brand-400 mb-3"></i>
+                        <h4 class="text-white font-bold text-lg">Centralized Document Control</h4>
+                        <p class="text-slate-400 text-xs max-w-xl mx-auto mt-1">
+                            Prevents production lines from manufacturing parts based on obsolete technical drawings by enforcing strict SQL-backed revision rules.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Contact Meta Info -->
+                <div class="lg:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-brand-400 text-xs font-mono uppercase tracking-wider font-semibold">Get In Touch</span>
+                        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-4">
+                            Let's Build Something Exceptional Together
+                        </h2>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-8">
+                            Whether you need a custom enterprise management system, a full-stack web application, or technical software consultation, feel free to drop a message.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400 text-lg">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Email Contact</div>
+                                    <div class="text-sm font-semibold text-white">michaelgarcia.dev@gmail.com</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                <div class="w-12 h-12 rounded-xl bg-accent-cyan/10 border border-accent-cyan/30 flex items-center justify-center text-accent-cyan text-lg">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Phone & Mobile</div>
+                                    <div class="text-sm font-semibold text-white">0951-056-8468</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                <div class="w-12 h-12 rounded-xl bg-accent-purple/10 border border-accent-purple/30 flex items-center justify-center text-accent-purple text-lg">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Location</div>
+                                    <div class="text-sm font-semibold text-white">Purok 1, Bamban, Masinloc, Zambales</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social / Professional Links -->
+                    <div class="mt-8 flex gap-3">
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-brand-400 hover:border-brand-500/40 flex items-center justify-center transition-all">
+                            <i class="fa-brands fa-github text-lg"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-accent-cyan hover:border-accent-cyan/40 flex items-center justify-center transition-all">
+                            <i class="fa-brands fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Interactive Form -->
+                <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-3xl p-8 backdrop-blur-xl shadow-2xl relative">
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-300 mb-2">Your Name *</label>
+                                <input type="text" required placeholder="e.g. Engr. Mark Santos" class="w-full bg-slate-950/80 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-300 mb-2">Your Email *</label>
+                                <input type="email" required placeholder="e.g. mark.santos@enterprise.com" class="w-full bg-slate-950/80 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-300 mb-2">Subject / System Interest</label>
+                            <input type="text" placeholder="e.g. Customer Drawing & Assembly System Consultation" class="w-full bg-slate-950/80 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-300 mb-2">Message *</label>
+                            <textarea required rows="5" placeholder="Describe your production workflow, drawing control needs, or system requirements..." class="w-full bg-slate-950/80 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-500 via-brand-600 to-accent-cyan text-slate-950 font-bold text-sm shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                            <span>Send Message</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+
+                    <!-- Success Alert -->
+                    <div id="form-success" class="hidden absolute inset-0 bg-slate-950/95 rounded-3xl flex flex-col items-center justify-center text-center p-8 z-20">
+                        <div class="w-16 h-16 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-3xl mb-4 animate-bounce">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Message Sent Successfully!</h3>
+                        <p class="text-slate-300 text-sm max-w-md mb-6">Thank you for reaching out. Michael will review your message and get back to you promptly.</p>
+                        <button onclick="resetContactForm()" class="px-6 py-2.5 rounded-xl bg-slate-800 text-white text-xs font-medium hover:bg-slate-700">Send Another Message</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-8 bg-slate-950/80 text-center text-xs text-slate-500 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-display font-bold text-slate-300">Michael Español Garcia</span>
+                <span>• BS IT Full-Stack Engineer</span>
+            </div>
+            <div>
+                © 2026 Michael Español Garcia. Built with HTML5, CSS3, Tailwind CSS & Three.js.
+            </div>
+            <div>
+                <button onclick="scrollToSection('hero')" class="text-brand-400 hover:underline font-mono">Back to top <i class="fa-solid fa-arrow-up"></i></button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- RESUME MODAL -->
+    <div id="resume-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-3xl rounded-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="closeResumeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="border-b border-slate-800 pb-6 mb-6">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-white">MICHAEL ESPAÑOL GARCIA</h3>
+                        <p class="text-sm text-brand-400 font-mono">Purok 1, Bamban, Masinloc, Zambales | 0951-056-8468</p>
+                    </div>
+                    <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-brand-500 text-slate-950 font-bold text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> Print / Save PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resume Content -->
+            <div class="space-y-6 text-slate-300 text-sm">
+                <div>
+                    <h4 class="font-mono text-xs text-brand-400 uppercase font-bold tracking-wider mb-2">PROFESSIONAL SUMMARY</h4>
+                    <p class="leading-relaxed bg-slate-950/50 p-4 rounded-xl border border-slate-800/80">
+                        Motivated Bachelor of Science in Information Technology graduate with hands-on experience in full-stack web development. Skilled in building scalable enterprise web applications using Flask, React, RESTful APIs, and relational databases (MS SQL, MySQL). Passionate about creating efficient, user-centered software solutions for production and document management.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-xs text-brand-400 uppercase font-bold tracking-wider mb-2">TECHNICAL SKILLS</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                            <strong class="text-white">Frontend:</strong> HTML, CSS, JavaScript, React JS, Tailwind CSS
+                        </div>
+                        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                            <strong class="text-white">Backend:</strong> Python, Flask, PHP, Laravel
+                        </div>
+                        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                            <strong class="text-white">Databases:</strong> MS SQL, MySQL, PostgreSQL, SQLite3
+                        </div>
+                        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                            <strong class="text-white">Networking & Hardware:</strong> Network Configuration & Computer Hardware Troubleshooting
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-xs text-brand-400 uppercase font-bold tracking-wider mb-2">PROJECT EXPERIENCE</h4>
+                    <div class="space-y-4">
+                        <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+                            <div class="flex justify-between items-start font-bold text-white mb-1">
+                                <span>Customer Standard Management System</span>
+                                <span class="text-xs text-brand-400 font-mono">Current Company Project</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mb-2">HTML | CSS | JS | Flask | MS SQL</div>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                                <li>Developed enterprise drawing management system enabling users to upload and manage technical customer drawings.</li>
+                                <li>Implemented revision control and version tracking to ensure accurate production standards.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+                            <div class="flex justify-between items-start font-bold text-white mb-1">
+                                <span>Fan Assy Parts Monitoring System</span>
+                                <span class="text-xs text-brand-400 font-mono">Current Company Project</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mb-2">HTML | CSS | JS | Flask | MS SQL | Graphs Analytics</div>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                                <li>Engineered end-to-end monitoring system allowing mass forecast SO / shop order uploads.</li>
+                                <li>Implemented multi-department pipeline tracking: Warehouse Receive -> Assembly -> PQA -> Shipment.</li>
+                                <li>Built real-time sales & planning dashboards featuring analytical graphs for targeted vs. delivered output.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+                            <div class="flex justify-between items-start font-bold text-white mb-1">
+                                <span>Vehicle Validation Web System</span>
+                                <span class="text-xs text-slate-400 font-mono">Flask | React | REST API | MySQL</span>
+                            </div>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                                <li>Developed full-stack web application for vehicle validation and user management with role-based access control.</li>
+                                <li>Integrated payment gateway, document file storage, automatic sticker printing, and REST APIs.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+                            <div class="flex justify-between items-start font-bold text-white mb-1">
+                                <span>E-Learning Application for Hearing-Impaired Learners</span>
+                                <span class="text-xs text-slate-400 font-mono">Python | Kivy | SQLite3</span>
+                            </div>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                                <li>Built accessible e-learning desktop app with visual lessons, captioned materials, and localized progress DB.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-xs text-brand-400 uppercase font-bold tracking-wider mb-2">EDUCATIONAL ATTAINMENT</h4>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-slate-800/80 pb-2">
+                            <div>
+                                <strong class="text-white block">Bachelor of Science in Information Technology</strong>
+                                <span class="text-slate-400">President Ramon Magsaysay State University Main Campus</span>
+                            </div>
+                            <span class="font-mono text-brand-400">2024 - 2025</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-800/80 pb-2">
+                            <div>
+                                <strong class="text-white block">Computer Systems Servicing</strong>
+                                <span class="text-slate-400">Northern Zambales College INC.</span>
+                            </div>
+                            <span class="font-mono text-slate-400">2020 - 2021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT DETAILS MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative" id="project-modal-content">
+            <!-- Dynamic Modal Content populated by js/main.js -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/three-scene.js"></script>
+</body>
+</html>
